@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    container_name: Backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  frontend:
+    build: ./client
+    container_name: Frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+
+  db:
+    image: postgres:15
+    container_name: project-db
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
